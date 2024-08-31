@@ -1,0 +1,119 @@
+[gd_scene load_steps=12 format=3 uid="uid://gkbai5sqptia"]
+
+[ext_resource type="Script" path="res://player/player.gd" id="1_5degp"]
+[ext_resource type="Texture2D" uid="uid://b13fsgnp4boyl" path="res://assets/duckyduckducik2d.png" id="1_n0eef"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_65jph"]
+
+[sub_resource type="Animation" id="Animation_gulhh"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ducky:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ducky:frame_coords")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_88len"]
+resource_name = "idle"
+length = 0.7
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ducky:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_3bre4"]
+resource_name = "moving"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ducky:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2i(0, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(5, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_g3wh8"]
+_data = {
+"RESET": SubResource("Animation_gulhh"),
+"idle": SubResource("Animation_88len"),
+"moving": SubResource("Animation_3bre4")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ledik"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_87u6r"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_q7l1y"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_lpda2"]
+states/Start/position = Vector2(47, 34)
+states/idle/node = SubResource("AnimationNodeAnimation_ledik")
+states/idle/position = Vector2(234, 75)
+states/move/node = SubResource("AnimationNodeBlendSpace2D_87u6r")
+states/move/position = Vector2(525, 100)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_q7l1y")]
+
+[node name="character" type="CharacterBody2D"]
+position = Vector2(541, 265)
+disable_mode = 1
+script = ExtResource("1_5degp")
+
+[node name="ducky" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(54, 36)
+scale = Vector2(4.46875, 4.21875)
+texture = ExtResource("1_n0eef")
+hframes = 6
+vframes = 4
+frame = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, 2)
+shape = SubResource("CapsuleShape2D_65jph")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_g3wh8")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_lpda2")
+anim_player = NodePath("../AnimationPlayer")
+parameters/move/blend_position = Vector2(0, 0)

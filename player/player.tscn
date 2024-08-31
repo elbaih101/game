@@ -1,40 +1,15 @@
-[gd_scene load_steps=12 format=3 uid="uid://gkbai5sqptia"]
+[gd_scene load_steps=14 format=3 uid="uid://gkbai5sqptia"]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_5degp"]
 [ext_resource type="Texture2D" uid="uid://b13fsgnp4boyl" path="res://assets/duckyduckducik2d.png" id="1_n0eef"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_65jph"]
+radius = 12.0
+height = 32.0
 
-[sub_resource type="Animation" id="Animation_gulhh"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ducky:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ducky:frame_coords")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2i(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_88len"]
+[sub_resource type="Animation" id="Animation_sfmpw"]
 resource_name = "idle"
-length = 0.7
+length = 0.6
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -49,45 +24,68 @@ tracks/0/keys = {
 "values": [0, 1]
 }
 
-[sub_resource type="Animation" id="Animation_3bre4"]
-resource_name = "moving"
-length = 0.8
+[sub_resource type="Animation" id="Animation_kagt5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ducky:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_2am6w"]
+resource_name = "move"
+length = 1.1
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ducky:frame_coords")
+tracks/0/path = NodePath("ducky:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.2, 0.466667, 0.7, 0.933333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 1,
-"values": [Vector2i(0, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(5, 1)]
+"values": [7, 8, 9, 10, 11]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_g3wh8"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_615r7"]
 _data = {
-"RESET": SubResource("Animation_gulhh"),
-"idle": SubResource("Animation_88len"),
-"moving": SubResource("Animation_3bre4")
+"RESET": SubResource("Animation_kagt5"),
+"idle": SubResource("Animation_sfmpw"),
+"move": SubResource("Animation_2am6w")
 }
 
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ledik"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t2k5y"]
 animation = &"idle"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_87u6r"]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vna64"]
+animation = &"move"
 
-[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_q7l1y"]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kpeq6"]
 advance_mode = 2
 
-[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_lpda2"]
-states/Start/position = Vector2(47, 34)
-states/idle/node = SubResource("AnimationNodeAnimation_ledik")
-states/idle/position = Vector2(234, 75)
-states/move/node = SubResource("AnimationNodeBlendSpace2D_87u6r")
-states/move/position = Vector2(525, 100)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_q7l1y")]
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_y08r2"]
+advance_mode = 2
+advance_condition = &"moving"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_r7y1d"]
+advance_mode = 2
+advance_condition = &"idle"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_3utky"]
+states/idle/node = SubResource("AnimationNodeAnimation_t2k5y")
+states/idle/position = Vector2(368, 100)
+states/move/node = SubResource("AnimationNodeAnimation_vna64")
+states/move/position = Vector2(564, 100)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_kpeq6"), "idle", "move", SubResource("AnimationNodeStateMachineTransition_y08r2"), "move", "idle", SubResource("AnimationNodeStateMachineTransition_r7y1d")]
 
 [node name="character" type="CharacterBody2D"]
 position = Vector2(541, 265)
@@ -96,24 +94,26 @@ script = ExtResource("1_5degp")
 
 [node name="ducky" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(54, 36)
-scale = Vector2(4.46875, 4.21875)
+position = Vector2(11.5, 7.50001)
+scale = Vector2(2.26237, 1.90625)
 texture = ExtResource("1_n0eef")
 hframes = 6
 vframes = 4
-frame = 7
+frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
-position = Vector2(0, 2)
+position = Vector2(-4, -1)
 shape = SubResource("CapsuleShape2D_65jph")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-"": SubResource("AnimationLibrary_g3wh8")
+"": SubResource("AnimationLibrary_615r7")
 }
+playback_auto_capture_duration = 1.0
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-tree_root = SubResource("AnimationNodeStateMachine_lpda2")
+tree_root = SubResource("AnimationNodeStateMachine_3utky")
 anim_player = NodePath("../AnimationPlayer")
-parameters/move/blend_position = Vector2(0, 0)
+parameters/conditions/idle = false
+parameters/conditions/moving = false

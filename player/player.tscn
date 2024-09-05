@@ -4,8 +4,23 @@
 [ext_resource type="Texture2D" uid="uid://b13fsgnp4boyl" path="res://assets/duckyduckducik2d.png" id="1_n0eef"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_65jph"]
-radius = 12.0
-height = 32.0
+radius = 24.0
+height = 48.0
+
+[sub_resource type="Animation" id="Animation_kagt5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ducky:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
 
 [sub_resource type="Animation" id="Animation_sfmpw"]
 resource_name = "idle"
@@ -22,21 +37,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [0, 1]
-}
-
-[sub_resource type="Animation" id="Animation_kagt5"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ducky:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [1]
 }
 
 [sub_resource type="Animation" id="Animation_2am6w"]
@@ -88,13 +88,13 @@ states/move/position = Vector2(564, 100)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_kpeq6"), "idle", "move", SubResource("AnimationNodeStateMachineTransition_y08r2"), "move", "idle", SubResource("AnimationNodeStateMachineTransition_r7y1d")]
 
 [node name="character" type="CharacterBody2D"]
-position = Vector2(541, 265)
+position = Vector2(592, 310)
 disable_mode = 1
 script = ExtResource("1_5degp")
 
 [node name="ducky" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(11.5, 7.50001)
+position = Vector2(-4, -6.99999)
 scale = Vector2(2.26237, 1.90625)
 texture = ExtResource("1_n0eef")
 hframes = 6
@@ -103,7 +103,7 @@ frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
-position = Vector2(-4, -1)
+position = Vector2(-3, -1)
 shape = SubResource("CapsuleShape2D_65jph")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

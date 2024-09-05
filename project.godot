@@ -12,11 +12,17 @@ config_version=5
 
 config/name="fiddles"
 run/main_scene="res://moveCharacter.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.3", "C#", "Forward Plus")
 
 [dotnet]
 
 project/assembly_name="fiddles"
+
+[file_customization]
+
+folder_colors={
+"res://assets/": "red"
+}
 
 [input]
 
